@@ -1,9 +1,9 @@
-.loadButlon {
+.loadButton {
     width: 200px;
     height: 40px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     background-color: rgb(66, 66, 66);
     border-radius: 5px;
     color: white;
@@ -12,9 +12,10 @@
     cursor: pointer;
     transition-duration: .2s;
     flex-direction: row;
+    margin: 20px;
   }
-  
-  .loadButlon:hover {
+
+  .loadButton:hover {
     background-color: rgb(77, 77, 77);
     transition-duration: .2s;
     justify-content: center;

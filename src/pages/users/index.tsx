@@ -21,21 +21,25 @@ const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [gender, setGender] = useState<Gender>('');
   const [pageToGet, setPageToGet] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getUsers = async (page: number) => {
     const result = await fetch(
-      `${currentEnvironment.api.baseUrl}?results=5&gender=female&page=${String(page)}`,
+      `${currentEnvironment.api.baseUrl}?results=5&page=${String(page)}`,
     );
-    const usersResults = (await result.json()) as User[];
+    const resultJson = await result.json();
+    const usersResults = resultJson.results as User[];
 
     setUsers((oldUsers) => (page === 1 ? usersResults : [...oldUsers, ...usersResults]));
   };
 
   useEffect(() => {
     void (async () => {
+      setLoading(true);
       await getUsers(pageToGet);
+      setLoading(false);
     })();
-  }, []);
+  }, [pageToGet]);
 
   return (
     <div>
@@ -55,18 +59,19 @@ const Users = () => {
       </div>
       <ul>
         {users.length > 0
-          ? users.map((user: User) => (
+          ? users.filter((user) => gender === '' || user.gender === gender).map((user: User) => (
             <li key={user.login.uuid}>
               {user.name.first}
               {' '}
               {user.name.last}
-              {' '}
+              {' ('}
               {user.gender}
-              {' '}
+              {')'}
             </li>
           ))
           : null}
       </ul>
+      {loading ? <div>Loading...</div> : null}
       <button
         className={styles.loadButton}
         type="button"
